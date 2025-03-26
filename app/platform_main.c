@@ -123,8 +123,9 @@ void RaylibLogCallback(int logLevel, const char* text, va_list args)
 }
 #endif //BUILD_WITH_RAYLIB
 
-void PlatDoUpdate(void)
+bool PlatDoUpdate(void)
 {
+	bool didRender = true;
 	//TODO: Check for dll changes, reload it!
 	
 	//Swap which appInput is being written to and pass the static version to the application
@@ -171,6 +172,8 @@ void PlatDoUpdate(void)
 	#else
 	UNUSED(shouldContinueRunning);
 	#endif
+	
+	return didRender;
 }
 
 // +--------------------------------------------------------------+
@@ -331,9 +334,11 @@ void PlatSappEvent(const sapp_event* event)
 	
 	if (platformData->currentAppInput != nullptr)
 	{
+		// bool HandleSokolKeyboardAndMouseEvents(const sapp_event* event, u64 currentTime, v2i screenSize, KeyboardState* keyboard, MouseState* mouse, bool isMouseLocked)
 		handledEvent = HandleSokolKeyboardAndMouseEvents(
 			event,
 			platformData->currentAppInput->programTime, //TODO: Calculate a more accurate programTime to pass here!
+			NewV2i((i32)sapp_width(), (i32)sapp_height()),
 			&platformData->currentAppInput->keyboard,
 			&platformData->currentAppInput->mouse,
 			sapp_mouse_locked()

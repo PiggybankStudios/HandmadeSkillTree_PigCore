@@ -144,7 +144,10 @@ if "%DEBUG_BUILD%"=="1" (
 :: /LIBPATH = Add a library search path
 :: User32.lib = Needed for os_font.h for CreateFontA, etc.
 :: Gdi32.lib = Needed for os_font.h for GetForegroundWindow and GetDC
-set common_ld_flags=-incremental:no /NOLOGO User32.lib Gdi32.lib
+:: Ole32.lib = Needed for Combaseapi.h, CoInitializeEx, CoCreateInstance, etc.
+:: Shell32.lib = Needed for SHGetSpecialFolderPathA
+:: Shlwapi.lib = Needed for PathFileExistsA
+set common_ld_flags=-incremental:no /NOLOGO User32.lib Gdi32.lib Ole32.lib Shell32.lib Shlwapi.lib
 set pig_core_ld_flags=
 set platform_ld_flags=
 
