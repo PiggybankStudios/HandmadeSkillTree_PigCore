@@ -29,7 +29,7 @@ Description:
 // Build the WASM binary for operating as a webpage
 #define BUILD_WEB     0
 // Runs the sokol-shdc.exe on all .glsl files in the source directory to produce .glsl.h and .glsl.c files and then compiles the .glsl.c files to .obj
-#define BUILD_SHADERS 1
+#define BUILD_SHADERS 0
 
 // Compiles core/piggen/main.c
 #define BUILD_PIGGEN            0
@@ -88,7 +88,7 @@ Description:
 // Enables being linked with openvr_api.lib and it's required libraries
 #define BUILD_WITH_OPENVR     0
 // Enables using Clay header files
-#define BUILD_WITH_CLAY       0
+#define BUILD_WITH_CLAY       1
 // Enables using Dear ImGui through cimgui.h/cpp
 #define BUILD_WITH_IMGUI      0
 // Enables being linked with PhysX_static_64.lib as well as physx_capi.obj

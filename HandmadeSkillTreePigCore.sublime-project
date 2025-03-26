@@ -155,8 +155,19 @@
 		],
 		"custom_functions":
 		[
+			"Clay_ImageElementConfig ToClayImage(Texture* texture)",
+			"FontAtlas* GetDefaultFontAtlas(PigFont* font)",
+			"Result BakeFontAtlas(PigFont* font, r32 fontSize, u8 extraStyleFlags, v2i atlasSize, uxx numCharRanges, const FontCharRange* charRanges)",
 			"Result OsLoadDll(FilePath path, OsDll* dllOut)",
 			"Result TryParseImageFile(Slice fileContents, Arena* arena, ImageData* imageDataOut)",
+			"bool DoesFontAtlasContainCodepoint(const FontAtlas* atlas, u32 codepoint)",
+			"bool DoesFontAtlasContainCodepointEx(const FontAtlas* atlas, u32 codepoint, uxx* glyphIndexOut)",
+			"r32 GetDefaultFontSize(const PigFont* font)",
+			"u16 AddClayUIRendererFont(ClayUIRenderer* renderer, PigFont* fontPntr, u8 styleFlags)",
+			"u16 GetClayUIRendererFontId(ClayUIRenderer* renderer, PigFont* fontPntr, u8 styleFlags)",
+			"u8 GetDefaultFontStyleFlags(const PigFont* font)",
+			"void InitClayUIRenderer(Arena* arena, v2 windowSize, ClayUIRenderer* rendererOut)",
+			"void RenderClayCommandArray(ClayUIRenderer* renderer, GfxSystem* system, Clay_RenderCommandArray* commands)",
 		],
 		"custom_globals":
 		[

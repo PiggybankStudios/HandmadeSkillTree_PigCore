@@ -112,6 +112,23 @@ EXPORT_FUNC(AppInit) APP_INIT_DEF(AppInit)
 	InitRandomSeriesDefault(&app->random);
 	SeedRandomSeriesU64(&app->random, OsGetCurrentTimestamp(false));
 	
+	FontCharRange fontCharRanges[] = {
+		FontCharRange_ASCII,
+		FontCharRange_LatinExt,
+		NewFontCharRangeSingle(UNICODE_ELLIPSIS_CODEPOINT),
+		NewFontCharRangeSingle(UNICODE_RIGHT_ARROW_CODEPOINT),
+	};
+	
+	app->uiFont = InitFont(stdHeap, StrLit("uiFont"));
+	Result attachUiFontTtfResult = AttachOsTtfFileToFont(&app->uiFont, StrLit("Consolas"), 18, FontStyleFlag_None);
+	Assert(attachUiFontTtfResult == Result_Success);
+	Result uiFontBakeResult = BakeFontAtlas(&app->uiFont, 18, FontStyleFlag_None, NewV2i(256, 256), ArrayCount(fontCharRanges), &fontCharRanges[0]);
+	Assert(uiFontBakeResult == Result_Success);
+	RemoveAttachedTtfFile(&app->uiFont);
+	
+	InitClayUIRenderer(stdHeap, V2_Zero, &app->clay);
+	app->clayUiFontId = AddClayUIRendererFont(&app->clay, &app->uiFont, FontStyleFlag_None);
+	
 	app->initialized = true;
 	ScratchEnd(scratch);
 	ScratchEnd(scratch2);

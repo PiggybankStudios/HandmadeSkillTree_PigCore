@@ -12,6 +12,11 @@ struct AppData
 {
 	bool initialized;
 	RandomSeries random;
+	
+	PigFont uiFont;
+	
+	ClayUIRenderer clay;
+	u16 clayUiFontId;
 };
 
 #endif //  _APP_MAIN_H
