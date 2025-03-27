@@ -29,6 +29,7 @@ Description:
 // |                         Header Files                         |
 // +--------------------------------------------------------------+
 #include "platform_interface.h"
+#include "main2d_shader.glsl.h"
 #include "app_main.h"
 
 // +--------------------------------------------------------------+
@@ -47,7 +48,7 @@ static Arena* stdHeap = nullptr;
 // |                         Source Files                         |
 // +--------------------------------------------------------------+
 #include "app_helpers.c"
-//TODO: Add source files here!
+#include "app_clay_widgets.c"
 
 // +==============================+
 // |           DllMain            |
@@ -112,6 +113,8 @@ EXPORT_FUNC(AppInit) APP_INIT_DEF(AppInit)
 	InitRandomSeriesDefault(&app->random);
 	SeedRandomSeriesU64(&app->random, OsGetCurrentTimestamp(false));
 	
+	InitCompiledShader(&app->mainShader, stdHeap, main2d);
+	
 	FontCharRange fontCharRanges[] = {
 		FontCharRange_ASCII,
 		FontCharRange_LatinExt,
@@ -120,14 +123,14 @@ EXPORT_FUNC(AppInit) APP_INIT_DEF(AppInit)
 	};
 	
 	app->uiFont = InitFont(stdHeap, StrLit("uiFont"));
-	Result attachUiFontTtfResult = AttachOsTtfFileToFont(&app->uiFont, StrLit("Consolas"), 18, FontStyleFlag_None);
+	Result attachUiFontTtfResult = AttachOsTtfFileToFont(&app->uiFont, StrLit(UI_FONT_NAME), UI_FONT_SIZE, UI_FONT_STYLE);
 	Assert(attachUiFontTtfResult == Result_Success);
-	Result uiFontBakeResult = BakeFontAtlas(&app->uiFont, 18, FontStyleFlag_None, NewV2i(256, 256), ArrayCount(fontCharRanges), &fontCharRanges[0]);
+	Result uiFontBakeResult = BakeFontAtlas(&app->uiFont, UI_FONT_SIZE, UI_FONT_STYLE, NewV2i(256, 256), ArrayCount(fontCharRanges), &fontCharRanges[0]);
 	Assert(uiFontBakeResult == Result_Success);
 	RemoveAttachedTtfFile(&app->uiFont);
 	
 	InitClayUIRenderer(stdHeap, V2_Zero, &app->clay);
-	app->clayUiFontId = AddClayUIRendererFont(&app->clay, &app->uiFont, FontStyleFlag_None);
+	app->clayUiFontId = AddClayUIRendererFont(&app->clay, &app->uiFont, UI_FONT_STYLE);
 	
 	app->initialized = true;
 	ScratchEnd(scratch);
@@ -152,6 +155,63 @@ EXPORT_FUNC(AppUpdate) APP_UPDATE_DEF(AppUpdate)
 	v2 mousePos = appIn->mouse.position;
 	
 	//TODO: Implement me!
+	
+	// +--------------------------------------------------------------+
+	// |                            Render                            |
+	// +--------------------------------------------------------------+
+	BeginFrame(platform->GetSokolSwapchain(), appIn->screenSize, UiBackgroundBlack, 1.0f);
+	{
+		BindShader(&app->mainShader);
+		ClearDepthBuffer(1.0f);
+		SetDepth(1.0f);
+		mat4 projMat = Mat4_Identity;
+		TransformMat4(&projMat, MakeScaleXYZMat4(1.0f/(screenSize.Width/2.0f), 1.0f/(screenSize.Height/2.0f), 1.0f));
+		TransformMat4(&projMat, MakeTranslateXYZMat4(-1.0f, -1.0f, 0.0f));
+		TransformMat4(&projMat, MakeScaleYMat4(-1.0f));
+		SetProjectionMat(projMat);
+		SetViewMat(Mat4_Identity);
+		
+		bool isScrolling = UpdateClayScrolling(&app->clay.clay, 1000.0f/60.0f, false, appIn->mouse.scrollDelta, false);
+		UNUSED(isScrolling);
+		BeginClayUIRender(&app->clay.clay, screenSize, false, appIn->mouse.position, IsMouseBtnDown(&appIn->mouse, MouseBtn_Left));
+		{
+			CLAY({ .id=CLAY_ID("FullscreenContainer"),
+				.layout =
+				{
+					.layoutDirection = CLAY_TOP_TO_BOTTOM,
+					.sizing = { .width=CLAY_SIZING_FIXED(screenSize.Width), .height=CLAY_SIZING_FIXED(screenSize.Height) },
+				},
+			})
+			{
+				CLAY({ .id = CLAY_ID("Topbar"),
+					.layout = {
+						.sizing = { .width = CLAY_SIZING_GROW(0), .height = CLAY_SIZING_FIT(0) },
+						.padding = { 0, 0, 0, 1 },
+						.childGap = 2,
+						.childAlignment = { .y = CLAY_ALIGN_Y_CENTER },
+					},
+					.backgroundColor = ToClayColor(UiBackgroundDarkGray),
+					.border = { .color=ToClayColor(UiBackgroundGray), .width={ .bottom=1 } },
+				})
+				{
+					if (ClayTopBtn("File", false, &app->isFileMenuOpen, &app->keepFileMenuOpenUntilMouseOver, false))
+					{
+						if (ClayBtn("Open" UNICODE_ELLIPSIS_STR, "Ctrl+O", true, nullptr))
+						{
+							//TODO: Implement me!
+							app->isFileMenuOpen = false;
+						} Clay__CloseElement();
+						
+						Clay__CloseElement();
+						Clay__CloseElement();
+					} Clay__CloseElement();
+				}
+			}
+		}
+		Clay_RenderCommandArray uiRenderCommands = EndClayUIRender(&app->clay.clay);
+		RenderClayCommandArray(&app->clay, &gfx, &uiRenderCommands);
+	}
+	EndFrame();
 	
 	ScratchEnd(scratch);
 	ScratchEnd(scratch2);

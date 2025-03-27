@@ -149,12 +149,18 @@
 			"BUILD_PIG_CORE_LIB",
 			"BUILD_PIG_CORE_LIB_IF_NEEDED",
 			"COPY_TO_DATA_DIRECTORY",
+			"NUM_UI_COLORS",
 			"PIG_CORE_BUILDING_AS_DLL",
 			"PIG_CORE_IMPLEMENTATION",
 			"PIG_CORE_INLINE",
+			"TOPBAR_ICONS_PADDING",
+			"UI_FONT_NAME",
+			"UI_FONT_SIZE",
+			"UI_FONT_STYLE",
 		],
 		"custom_functions":
 		[
+			"#define BeginFrame(swapchain, screenSize, clearColor, clearDepth)",
 			"Clay_ImageElementConfig ToClayImage(Texture* texture)",
 			"FontAtlas* GetDefaultFontAtlas(PigFont* font)",
 			"Result BakeFontAtlas(PigFont* font, r32 fontSize, u8 extraStyleFlags, v2i atlasSize, uxx numCharRanges, const FontCharRange* charRanges)",

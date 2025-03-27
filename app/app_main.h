@@ -13,10 +13,14 @@ struct AppData
 	bool initialized;
 	RandomSeries random;
 	
+	Shader mainShader;
 	PigFont uiFont;
 	
 	ClayUIRenderer clay;
 	u16 clayUiFontId;
+	
+	bool isFileMenuOpen;
+	bool keepFileMenuOpenUntilMouseOver;
 };
 
 #endif //  _APP_MAIN_H
