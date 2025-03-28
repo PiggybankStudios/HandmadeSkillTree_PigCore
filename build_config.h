@@ -96,7 +96,7 @@ Description:
 // Enables being linked with PhysX_static_64.lib as well as physx_capi.obj
 #define BUILD_WITH_PHYSX      0
 
-#define PROJECT_READABLE_NAME Handmade Skilltree
+#define PROJECT_READABLE_NAME Handmade Skill Tree
 #define PROJECT_FOLDER_NAME   HMSkillTree
 #define PROJECT_DLL_NAME      hmskilltree_hot_reload
 #define PROJECT_EXE_NAME      hmskilltree
