@@ -49,12 +49,12 @@ Description:
 #define BUILD_PHYSX_OBJ_IF_NEEDED 0
 
 // Compiles piggen/main.c to either dynamic or static library
-#define BUILD_PIG_CORE_LIB            1
+#define BUILD_PIG_CORE_LIB            0
 // Same as above but only compiles if the dll doesn't already exist in the _build folder
 #define BUILD_PIG_CORE_LIB_IF_NEEDED  1
 
 // Compiles app/platform_main.c to %PROJECT_EXE_NAME%.exe
-#define BUILD_APP_EXE  1
+#define BUILD_APP_EXE  0
 // Compiles app/app_main.c to %PROJECT_DLL_NAME%.dll
 #define BUILD_APP_DLL  1
 // Runs the %PROJECT_EXE_NAME%.exe
@@ -69,11 +69,13 @@ Description:
 #define DUMP_PREPROCESSOR 0
 // After .wasm file(s) are generated, we will run wasm2wat on them to make a .wat
 // file (a text format of WebAssembly that is readable, mostly for debugging purposes)
-#define CONVERT_WASM_TO_WAT 1
+#define CONVERT_WASM_TO_WAT 0
 // Use emcc when compiling the WEB files
 #define USE_EMSCRIPTEN 0
 // Enables auto-profiling on function entry/exit (for clang only). Dumps to a file that can be viewed by spall
 #define ENABLE_AUTO_PROFILE 0
+
+#define PREFER_OPENGL_OVER_D3D11 1
 
 // Enables being linked with raylib.lib and it's required libraries
 #define BUILD_WITH_RAYLIB     0

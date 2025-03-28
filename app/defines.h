@@ -14,4 +14,6 @@ Date:   02\25\2025
 #define TOPBAR_ICONS_SIZE  16 //px
 #define TOPBAR_ICONS_PADDING  8 //px
 
+#define MAX_NODE_NAME_WIDTH 80 //px
+
 #endif //  _DEFINES_H

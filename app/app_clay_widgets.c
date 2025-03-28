@@ -132,7 +132,6 @@ bool ClayTopBtn(const char* btnText, bool showAltText, bool* isOpenPntr, bool* k
 	return *isOpenPntr;
 }
 
-
 //Call Clay__CloseElement once after if statement
 bool ClayBtnStrEx(Str8 idStr, Str8 btnText, Str8 hotkeyStr, bool isEnabled, Texture* icon)
 {

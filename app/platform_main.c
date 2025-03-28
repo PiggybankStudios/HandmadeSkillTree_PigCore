@@ -334,7 +334,6 @@ void PlatSappEvent(const sapp_event* event)
 	
 	if (platformData->currentAppInput != nullptr)
 	{
-		// bool HandleSokolKeyboardAndMouseEvents(const sapp_event* event, u64 currentTime, v2i screenSize, KeyboardState* keyboard, MouseState* mouse, bool isMouseLocked)
 		handledEvent = HandleSokolKeyboardAndMouseEvents(
 			event,
 			platformData->currentAppInput->programTime, //TODO: Calculate a more accurate programTime to pass here!
@@ -391,6 +390,17 @@ void PlatSappEvent(const sapp_event* event)
 			case SAPP_EVENTTYPE_QUIT_REQUESTED:    WriteLine_D("Event: QUIT_REQUESTED");    break;
 			case SAPP_EVENTTYPE_CLIPBOARD_PASTED:  WriteLine_D("Event: CLIPBOARD_PASTED");  break;
 			case SAPP_EVENTTYPE_FILES_DROPPED:     WriteLine_D("Event: FILES_DROPPED");     break;
+			
+			//NOTE: We currently only get this event when using OpenGL as the rendering backend since D3D11 has weird problems when we try to resize/render inside the WM_PAINT event
+			#if TARGET_IS_WINDOWS
+			//NOTE: I added this event type in order to update/render while the app is resized on Windows
+			case SAPP_EVENTTYPE_RESIZE_RENDER:
+			{
+				PlatDoUpdate();
+				sapp_consume_event(); //This tells Sokol backend that we actually rendered and want a frame flip
+			} break;
+			#endif //TARGET_IS_WINDOWS
+			
 			default: PrintLine_D("Event: UNKNOWN(%d)", event->type); break;
 		}
 	}

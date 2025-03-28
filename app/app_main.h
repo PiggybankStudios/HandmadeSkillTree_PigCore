@@ -21,6 +21,18 @@ struct AppData
 	
 	bool isFileMenuOpen;
 	bool keepFileMenuOpenUntilMouseOver;
+	
+	SkillTree tree;
+	
+	v2 viewPosition; //center of view
+	bool isMovingView;
+	v2 movingViewGrabPos;
+	rec graphBounds;
+	
+	TreeNode* hoveredNode;
+	bool isMovingNode;
+	v2 movingNodeGrabOffset;
+	uxx movingNodeId;
 };
 
 #endif //  _APP_MAIN_H
